@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\DataSensorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,17 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/data_sensor', [DataSensorController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('/cek', function () {
-    return view('layouts.template');
-});
-
-Route::get('/cek1', function () {
-    return view('layouts.main');
-});
-
-
+require __DIR__.'/auth.php';
