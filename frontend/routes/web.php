@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::get('/data_sensor', [DataSensorController::class, 'index']);
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('main_dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
