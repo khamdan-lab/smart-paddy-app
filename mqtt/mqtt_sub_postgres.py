@@ -14,12 +14,10 @@ def on_connect(client, userdata, flags, rc):
    print("connecting mqtt"+str(rc))
    client.subscribe("esp32/temphum")
 
-def on_message(client, userdata, msg):
 
+def on_message(client, userdata, msg):
    try:
-      # print(msg.payload.decode())
       data = json.loads(msg.payload.decode())
-    #   print(data)
       cursor = conn.cursor()
       temperature=data.get("temperature")
       humidity=data.get("humidity")
@@ -32,14 +30,16 @@ def on_message(client, userdata, msg):
       conn.commit()
       conn.close
       print('success')
-   except ValueError:
-      print('error' + ValueError)
+      print(data)
+   except :
+      print('Data error')
 
-cursor = conn.cursor()
-client = mqtt.Client()
-client.on_connect = on_connect
-client.on_message = on_message
-client.connect("test.mosquitto.org", 1883,60)      
-client.loop_forever()
+def main():
+   cursor = conn.cursor()
+   client = mqtt.Client()
+   client.on_connect = on_connect
+   client.on_message = on_message
+   client.connect("test.mosquitto.org", 1883,60)      
+   client.loop_forever()
 
-
+main()
