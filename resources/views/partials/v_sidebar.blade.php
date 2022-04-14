@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <ul class="nav nav-primary">
+            <ul class="nav nav-success">
                 <li class="nav-item active">
                     <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
                         <i class="fas fa-home"></i>

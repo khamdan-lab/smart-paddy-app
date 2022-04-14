@@ -1,4 +1,21 @@
     </div>
+    <!-- Custom template | don't include it in your project! -->
+		<div class="custom-template">
+			<div class="title">Setup Device</div>
+			<div class="custom-content">
+				<div class="switcher">
+					<div class="switch-block">
+                        <div class="form-check pl-0">
+                            <input id="stackedCheck1" class="form-check-input" type="checkbox" data-toggle="toggle" checked>
+                            <label for="stackedCheck1" class="form-check-label">Enabled</label>
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="custom-toggle">
+				<i class="flaticon-settings"></i>
+			</div>
+		</div>
 <!-- End Custom template -->
 </div>
 <!--   Core JS Files   -->

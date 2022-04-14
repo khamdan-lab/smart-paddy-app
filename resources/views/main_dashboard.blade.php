@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('content')
     <div class="content">
-        <div class="panel-header bg-primary-gradient">
+        <div class="panel-header bg-success-gradient">
             <div class="page-inner py-5">
                 <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                     <div>
@@ -89,7 +89,7 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: "temperature",
+                    label: "temperature :",
                     borderColor: "#1d7af3",
                     pointBorderColor: "#FFF",
                     pointBackgroundColor: "#1d7af3",
@@ -263,7 +263,7 @@
         client.subscribe("esp32/temphum");
         client.on('message', function(topic, message) {
             console.log("message is: " + message);
-            console.log(message.length);
+            // console.log(message.length);
             let data = JSON.parse(message)
             temperature.data.datasets[0].data.push(data.temperature);
             temperature.data.labels.push(getTime());
@@ -273,5 +273,7 @@
             humidity.update();
             // console.log(data.soil_ph, data.soil_moisture, data.temperature, data.humidity)
         });
+
+
     </script>
 @endpush

@@ -21,6 +21,7 @@
         "tailwindcss": "^3.0.18"
     },
     "dependencies": {
+        "bootstrap4-toggle": "^3.6.1",
         "mqtt": "^4.3.7"
     }
 }

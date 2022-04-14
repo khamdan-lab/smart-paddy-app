@@ -3,9 +3,9 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Atlantis Lite - Bootstrap 4 Admin Dashboard</title>
+    <title>SmartFarm Dashboard</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <link rel="icon" href="{{ asset('template/assets/img/icon.ico') }}" type="image/x-icon" />
+    {{-- <link rel="icon" href="{{ asset('template/assets/img/icon.ico') }}" type="image/x-icon" /> --}}
 
     <!-- Fonts and icons -->
     <script src="{{ asset('template/assets/js/plugin/webfont/webfont.min.js') }}"></script>
@@ -33,15 +33,16 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('template/assets/css/demo.css') }}">
     @stack('css')
+
 </head>
 
 <body>
     <div class="wrapper">
         <div class="main-header">
             <!-- Logo Header -->
-            <div class="logo-header" data-background-color="blue">
-                <a href="index.html" class="logo">
-                    <img src="{{ asset('template/assets/img/logo.svg') }}" alt="navbar brand" class="navbar-brand">
+            <div class="logo-header" data-background-color="white">
+                <a href="/dashboard" class="logo">
+                    <img src="{{ asset('image/logo-inverse.png') }}" alt="navbar brand" class="navbar-brand">
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
                     data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +59,7 @@
             </div>
             <!-- End Logo Header -->
 
-            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="green2">
                 <div class="container-fluid">
                     {{-- <div class="collapse" id="search-nav">
                         <form class="navbar-left navbar-form nav-search mr-md-3">

@@ -15,6 +15,7 @@ class CreateDataSensorsTable extends Migration
     {
         Schema::create('data_sensors', function (Blueprint $table) {
             $table->id();
+            $table->String('device_id');
             $table->float('temperature', 5,2);
             $table->float('humidity', 5,2);
             $table->float('soil_moisture', 5,2);
