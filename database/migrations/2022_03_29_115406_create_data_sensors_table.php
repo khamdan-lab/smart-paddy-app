@@ -18,7 +18,7 @@ class CreateDataSensorsTable extends Migration
             $table->String('device_id');
             $table->float('temperature', 5,2);
             $table->float('humidity', 5,2);
-            $table->float('soil_moisture', 5,2);
+            $table->integer('soil_moisture');
             $table->float('ph', 5,2);
             $table->String('light_intensity');
             $table->String('wind_speed');

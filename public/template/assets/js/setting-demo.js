@@ -3,7 +3,7 @@
 // Setting Color
 
 $(window).resize(function() {
-	$(window).width(); 
+	$(window).width();
 });
 
 $('.changeBodyBackgroundFullColor').on('click', function(){
@@ -70,7 +70,6 @@ function customCheckColor(){
 		$('.logo-header .navbar-brand').attr('src', '../assets/img/logo2.svg');
 	}
 }
-
 
 var toggle_customSidebar = false,
 custom_open = 0;

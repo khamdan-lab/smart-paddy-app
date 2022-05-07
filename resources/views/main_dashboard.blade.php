@@ -257,23 +257,47 @@
         //     PH.update();
         // }, 10000);
 
-        var client = mqtt.connect("ws://test.mosquitto.org:8081", {
-            clientId: "mqtt-tester"
-        });
-        client.subscribe("esp32/temphum");
-        client.on('message', function(topic, message) {
-            console.log("message is: " + message);
-            // console.log(message.length);
-            let data = JSON.parse(message)
-            temperature.data.datasets[0].data.push(data.temperature);
-            temperature.data.labels.push(getTime());
-            humidity.data.datasets[0].data.push(data.humidity);
-            humidity.data.labels.push(getTime());
-            temperature.update();
-            humidity.update();
-            // console.log(data.soil_ph, data.soil_moisture, data.temperature, data.humidity)
-        });
+
+            var client = mqtt.connect("ws://test.mosquitto.org:8081", {
+                clientId: "mqtt-tester"
+            });
+            client.subscribe("esp32/temphum");
+            client.on('message', function(topic, message) {
+
+                try {
+
+                    console.log("message is: " + message);
+                    let data = JSON.parse(message)
+                    // temperature.data.datasets[0].data.push(data.temperature);
+                    // temperature.data.labels.push(getTime());
+                    // humidity.data.datasets[0].data.push(data.humidity);
+                    // humidity.data.labels.push(getTime());
+                    // temperature.update();
+                    // humidity.update();
+                    $.ajax({
+                        type: "get",
+                        url: "{{ url('store_detail')}}",
+                        data: {
+                            device_id       : data.device_id,
+                            temperature     : data.temperature,
+                            humidity        : data.humidity,
+                            soil_moisture   : data.soil_moisture,
+                            ph              : data.soil_ph,
+                            light_intensity : data.light_intensity,
+                            wind_speed      : data.wind_speed,
+                            wind_direction  : data.wind_direction
+                        }
+                    });
+
+                } catch (error) {
+                    console.log("Data error");
+                }
+
+            });
 
 
     </script>
 @endpush
+
+
+

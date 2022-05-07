@@ -19,6 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/data_sensor', [DataSensorController::class, 'index']);
+Route::get('/store_detail', [DataSensorController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return view('main_dashboard');

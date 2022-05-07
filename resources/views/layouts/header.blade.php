@@ -32,6 +32,7 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('template/assets/css/demo.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/switch.css') }}">
     @stack('css')
 
 </head>
