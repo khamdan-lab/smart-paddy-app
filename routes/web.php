@@ -20,9 +20,9 @@ Route::get('/', function () {
 
 Route::get('/data_sensor', [DataSensorController::class, 'index']);
 Route::get('/store_detail', [DataSensorController::class, 'store']);
+Route::get('/filterHari', [DataSensorController::class, 'filterHari']);
+Route::get('/filterBulan', [DataSensorController::class, 'filterBulan']);
 
-Route::get('/dashboard', function () {
-    return view('main_dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [DataSensorController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

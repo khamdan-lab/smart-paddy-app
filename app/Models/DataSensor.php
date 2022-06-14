@@ -15,9 +15,12 @@ class DataSensor extends Model
         'humidity',
         'soil_moisture',
         'ph',
+        'ph_water',
         'light_intensity',
         'wind_speed',
-        'wind_direction'
+        'rainfall',
+        'latitude',
+        'longitude'
     ];
 
 }

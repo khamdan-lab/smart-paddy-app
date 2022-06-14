@@ -20,9 +20,12 @@ class CreateDataSensorsTable extends Migration
             $table->float('humidity', 5,2);
             $table->integer('soil_moisture');
             $table->float('ph', 5,2);
+            $table->float('ph_water', 5,2);
             $table->String('light_intensity');
             $table->String('wind_speed');
-            $table->String('wind_direction');
+            $table->String('rainfall');
+            $table->float('latitude', 5,2);
+            $table->float('longitude', 5,2);
             $table->timestamps();
         });
     }

@@ -108,9 +108,9 @@
                 <button class="btn btn-primary" id="save"> Save </button>
             </div>
         </div>
-        <div class="custom-toggle">
+        {{-- <div class="custom-toggle">
             <i class="flaticon-settings"></i>
-        </div>
+        </div> --}}
     </div>
     <!-- End Custom template -->
     </div>
@@ -155,6 +155,9 @@
     <!-- Atlantis DEMO methods, don't include it in your project! -->
     <script src="{{ asset('template/assets/js/setting-demo.js') }}"></script>
     <script src="{{ asset('template/assets/js/demo.js') }}"></script>
+     {{-- notify --}}
+     <script src="{{ asset('js/notify.js') }}"></script>
+     <script src="{{ asset('js/notify.min.js') }}"></script>
     {{-- @yield('values') --}}
 
     <script>
@@ -165,9 +168,6 @@
         var ph_water = document.getElementById("ph_water")
         var wind_speed = document.getElementById("wind_speed")
         var wind_direction = document.getElementById("wind_direction")
-        // document.getElementById("dht").addEventListener("change", function(element) {
-        //     // console.log(dht.checked)
-        // });
 
         $('#save').click(function() {
             const setup = {
