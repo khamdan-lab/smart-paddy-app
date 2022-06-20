@@ -13,24 +13,28 @@ conn = psycopg2.connect(user="postgres",
 
 def on_connect(client, userdata, flags, rc):
    print("connecting mqtt"+str(rc))
-   client.subscribe("esp32/temphum")
+   client.subscribe("smartpaddy/polindra")
 
 
 def on_message(client, userdata, msg):
    try:
-        data = json.loads(msg.payload.decode())
+        str = msg.payload.decode()
+        data = str.split(',')
+
         timestamp = datetime.now()
         cursor = conn.cursor()
-        device_id=data.get("id")
-        latitude =data.get("lat")
-        longitude =data.get("on")
-        temperature=data.get("temp")
-        humidity=data.get("humd")
-        soil_moisture=data.get("som")
-        soil_ph=data.get("sph")
-        light_intensity=data.get("light")
-        wind_speed=data.get("ws")
-        cursor.execute("insert into data_sensors(device_id,temperature,humidity,soil_moisture,ph,light_intensity,wind_speed,latitude,longitude,created_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(device_id,temperature,humidity,soil_moisture,soil_ph,light_intensity,wind_speed,latitude,longitude,timestamp))
+        device_id=data[0]
+        temperature=data[1]
+        humidity=data[2]
+        soil_moisture=data[3]
+        soil_ph=data[4]
+        water_ph=data[5]
+        light_intensity=data[6]
+        wind_speed=data[7]
+        rainfall =data[8]
+        latitude =data[9]
+        longitude =data[10]
+        cursor.execute("insert into data_sensors(device_id,temperature,humidity,soil_moisture,ph,ph_water,light_intensity,wind_speed,rainfall,latitude,longitude,created_at) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",(device_id,temperature,humidity,soil_moisture,soil_ph,water_ph,light_intensity,wind_speed,rainfall,latitude,longitude,timestamp))
         conn.commit()
         conn.close
         print('success')
