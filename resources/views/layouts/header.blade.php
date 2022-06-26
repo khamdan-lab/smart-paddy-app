@@ -29,6 +29,11 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('template/assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/assets/css/atlantis.min.css') }}">
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    {{-- <script>
+        // An mqtt variable will be initialized globally
+        console.log(mqtt)
+    </script> --}}
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
@@ -77,13 +82,13 @@
                         </form>
                     </div> --}}
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<form action="{{ route('logout') }}" method="POST">
-							@csrf
-							<button class="btn" type="submit" style="background-color:transparent; color: white">
-								<i class="fas fa-power-off"></i>
-								Logout
-							</button>
-						</form>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn" type="submit" style="background-color:transparent; color: white">
+                                <i class="fas fa-power-off"></i>
+                                Logout
+                            </button>
+                        </form>
 
                         {{-- <li class="nav-item dropdown hidden-caret">
                             <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"

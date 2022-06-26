@@ -13,7 +13,6 @@ class DataSensorController extends Controller
     public function index()
     {
         $date = Carbon::now()->toDateString();
-        // $date = "2022-05-28" ;
 
         $temp           = DataSensor::whereDate('created_at', $date)->pluck('temperature');
         $humd           = DataSensor::whereDate('created_at', $date)->pluck('humidity');
@@ -31,7 +30,6 @@ class DataSensorController extends Controller
              array_push($time, $hour);
         }
 
-        // return $date;
         return view('main_dashboard', compact(['temp','humd','soilPH', 'waterPH' ,'soilMoisture','lightIntensity','windSpeed', 'rainfall', 'time']));
 
     }
@@ -66,9 +64,11 @@ class DataSensorController extends Controller
         $temp           = DataSensor::whereDate('created_at', $date)->pluck('temperature');
         $humd           = DataSensor::whereDate('created_at', $date)->pluck('humidity');
         $soilPH         = DataSensor::whereDate('created_at', $date)->pluck('ph');
+        $waterPH        = DataSensor::whereDate('created_at', $date)->pluck('ph_water');
         $soilMoisture   = DataSensor::whereDate('created_at', $date)->pluck('soil_moisture');
         $lightIntensity = DataSensor::whereDate('created_at', $date)->pluck('light_intensity');
         $windSpeed      = DataSensor::whereDate('created_at', $date)->pluck('wind_speed');
+        $rainfall       = DataSensor::whereDate('created_at', $date)->pluck('rainfall');
         $now_day        = Carbon::now();
         $date_now       = DataSensor::whereDate('created_at', $date)->pluck('created_at');
         $time  = array();
@@ -77,8 +77,7 @@ class DataSensorController extends Controller
              array_push($time, $hour);
         }
 
-        // return $date;
-        return view('grafik.main', compact(['temp','humd','soilPH', 'soilMoisture','lightIntensity','windSpeed', 'time']));
+        return view('grafik.main', compact(['temp','humd','soilPH','waterPH','soilMoisture','lightIntensity','windSpeed','rainfall','time']));
 
     }
 
@@ -89,9 +88,11 @@ class DataSensorController extends Controller
         $temp           = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('temperature');
         $humd           = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('humidity');
         $soilPH         = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('ph');
+        $waterPH        = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('ph_water');
         $soilMoisture   = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('soil_moisture');
         $lightIntensity = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('light_intensity');
         $windSpeed      = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('wind_speed');
+        $rainfall       = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('rainfall');
         $date           = DataSensor::whereMonth('created_at', $month)->whereYear('created_at', $year)->pluck('created_at');
 
         $time  = array();
@@ -100,8 +101,7 @@ class DataSensorController extends Controller
              array_push($time, $hour);
         }
 
-        // return $time;
-        return view('grafik.main', compact(['temp','humd','soilPH', 'soilMoisture','lightIntensity','windSpeed', 'time']));
+        return view('grafik.main', compact(['temp','humd','soilPH','waterPH','soilMoisture','lightIntensity','windSpeed','rainfall','time']));
     }
 
 }

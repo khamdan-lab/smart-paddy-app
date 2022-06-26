@@ -144,7 +144,6 @@
         .circles-text {
             font-size: 15pt !important;
         }
-
     </style>
 @endpush
 
@@ -152,560 +151,542 @@
 @push('dashboard')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"
         integrity="sha512-tc5xpAPaQDl/Uxd7ZVbV66v94Lys0IefMJSdlABPuzyCv0IXmr9TkqEQvZiWKRoXMSlP5YPRwpq2a+v5q2uzMg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
-    </script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        var temp = @json($temp);
+        var humd = @json($humd);
+        var soilPH = @json($soilPH);
+        var waterPH = @json($waterPH);
+        var soilMoisture = @json($soilMoisture);
+        var light = @json($lightIntensity);
+        var windspeed = @json($windSpeed);
+        var rainfall = @json($rainfall);
+        var time = @json($time);
 
 
-            var temp            = @json($temp);
-            var humd            = @json($humd);
-            var soilPH          = @json($soilPH);
-            var soilMoisture    = @json($soilMoisture);
-            var light           = @json($lightIntensity);
-            var windspeed       = @json($windSpeed);
-            var time            = @json($time);
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
 
+        function getTime() {
+            var today = new Date();
+            var time = today.getHours() + ":" + today.getMinutes();
+            return time;
+        }
 
-            function getRandomInt(max) {
-                return Math.floor(Math.random() * max);
+        var temperatureChart = document.getElementById('temperatureChart').getContext('2d')
+        var humidityChart = document.getElementById('humidityChart').getContext('2d')
+        var PHChart = document.getElementById('PHChart').getContext('2d')
+        var PHWaterChart = document.getElementById('PHWaterChart').getContext('2d')
+        var MoistureChart = document.getElementById('MoistureChart').getContext('2d')
+        var LightChart = document.getElementById('LightChart').getContext('2d')
+        var WindChart = document.getElementById('WindChart').getContext('2d')
+        var RainChart = document.getElementById('RainfallChart').getContext('2d')
+
+        var temperature = new Chart(temperatureChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Suhu :",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: temp
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
+                },
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
+        });
 
-            function getTime() {
-                var today = new Date();
-                var time = today.getHours() + ":" + today.getMinutes();
-                return time;
+        var humidity = new Chart(humidityChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Kelembaban",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: humd
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
+                },
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
             }
+        });
 
-            var temperatureChart    = document.getElementById('temperatureChart').getContext('2d')
-            var humidityChart       = document.getElementById('humidityChart').getContext('2d')
-            var PHChart             = document.getElementById('PHChart').getContext('2d')
-            var MoistureChart       = document.getElementById('MoistureChart').getContext('2d')
-            var LightChart          = document.getElementById('LightChart').getContext('2d')
-            var WindChart           = document.getElementById('WindChart').getContext('2d')
-
-            var temperature = new Chart(temperatureChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Suhu :",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: temp
-                    }]
+        var PH = new Chart(PHChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "PH Tanah",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: soilPH
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            var humidity = new Chart(humidityChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Kelembaban",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data:humd
-                    }]
+
+        var PHWater = new Chart(PHWaterChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "PH Air",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: waterPH
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            var PH = new Chart(PHChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "PH Tanah",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: soilPH
-                    }]
+        var Moisture = new Chart(MoistureChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Kelembaban Tanah",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: soilMoisture
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-
-            var PHWater = new Chart(PHWaterChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "PH Air",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: soilPH
-                    }]
+        var Light = new Chart(LightChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Intensitas Cahaya",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: light
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            var Moisture = new Chart(MoistureChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Kelembaban Tanah",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: soilMoisture
-                    }]
+        var Wind = new Chart(WindChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Kecapatan Angin",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: windspeed
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            var Light = new Chart(LightChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Intensitas Cahaya",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: light
-                    }]
+        var Rain = new Chart(RainChart, {
+            type: 'line',
+            data: {
+                labels: time,
+                datasets: [{
+                    label: "Curah Hujan",
+                    borderColor: "#1d7af3",
+                    pointBorderColor: "#FFF",
+                    pointBackgroundColor: "#1d7af3",
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 4,
+                    pointHoverBorderWidth: 1,
+                    pointRadius: 4,
+                    backgroundColor: 'transparent',
+                    fill: true,
+                    borderWidth: 2,
+                    data: rainfall
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 10,
+                        fontColor: '#1d7af3',
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                tooltips: {
+                    bodySpacing: 4,
+                    mode: "nearest",
+                    intersect: 0,
+                    position: "nearest",
+                    xPadding: 10,
+                    yPadding: 10,
+                    caretPadding: 10
+                },
+                layout: {
+                    padding: {
+                        left: 15,
+                        right: 15,
+                        top: 15,
+                        bottom: 15
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            var Wind = new Chart(WindChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Kecapatan Angin",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: windspeed
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+        const options = {
+            clean: true,
+            connectTimeout: 4000,
+            clientId: 'test',
+        }
+        var host = '{{ env('MQTT_HOST') }}';
+        topic = '{{ env('MQTT_TOPIC') }}';
 
-            var Rain = new Chart(RainfallChart, {
-                type: 'line',
-                data: {
-                    labels: time,
-                    datasets: [{
-                        label: "Curah Hujan",
-                        borderColor: "#1d7af3",
-                        pointBorderColor: "#FFF",
-                        pointBackgroundColor: "#1d7af3",
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 4,
-                        pointHoverBorderWidth: 1,
-                        pointRadius: 4,
-                        backgroundColor: 'transparent',
-                        fill: true,
-                        borderWidth: 2,
-                        data: windspeed
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 10,
-                            fontColor: '#1d7af3',
-                        }
-                    },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {
-                            left: 15,
-                            right: 15,
-                            top: 15,
-                            bottom: 15
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+        const client = mqtt.connect('{{ env('MQTT_PROTOCOL') }}://' + host + ':{{ env('MQTT_PORT') }}', options)
+        client.on('connect', function() {
+            console.log('Websoket Connected')
+            client.subscribe(topic)
+        })
 
+        client.on('message', function(topic, message) {
+            let data = message.toString().split(",")
+            temp.push(data[1]);
+            humd.push(data[2]);
+            soilMoisture.push(data[3]);
+            soilPH.push(data[4]);
+            waterPH.push(data[5]);
+            light.push(data[6]);
+            windspeed.push(data[7]);
+            rainfall.push(data[8]);
+            time.push(getTime());
 
-        // setInterval(function() {
-        //     temperature.data.datasets[0].data.push(getRandomInt(20));
-        //     temperature.data.labels.push(getTime());
-        //     humidity.data.datasets[0].data.push(getRandomInt(20));
-        //     humidity.data.labels.push(getTime());
-        //     PH.data.datasets[0].data.push(getRandomInt(20));
-        //     PH.data.labels.push(getTime());
-        //     // console.log(temperature.data.datasets[0].data);
-        //     temperature.update();
-        //     humidity.update();
-        //     PH.update();
-        // }, 10000);
-
-
-            // var client = mqtt.connect("ws://test.mosquitto.org:8081", {
-            //     clientId: "mqtt-tester"
-            // });
-            // client.subscribe("esp32/temphum");
-            // client.on('message', function(topic, message) {
-
-            //     try {
-
-            //         console.log("message is: " + message);
-            //         let data = JSON.parse(message)
-            //         // temperature.data.datasets[0].data.push(data.temperature);
-            //         // temperature.data.labels.push(getTime());
-            //         // humidity.data.datasets[0].data.push(data.humidity);
-            //         // humidity.data.labels.push(getTime());
-            //         // temperature.update();
-            //         // humidity.update();
-            //         $.ajax({
-            //             type: "get",
-            //             url: "{{ url('store_detail')}}",
-            //             data: {
-            //                 device_id       : data.device_id,
-            //                 temperature     : data.temperature,
-            //                 humidity        : data.humidity,
-            //                 soil_moisture   : data.soil_moisture,
-            //                 ph              : data.soil_ph,
-            //                 light_intensity : data.light_intensity,
-            //                 wind_speed      : data.wind_speed,
-            //                 wind_direction  : data.wind_direction
-            //             }
-            //         });
-
-            //     } catch (error) {
-            //         console.log("Data error");
-            //     }
-
-            // });
+            temperature.update();
+            humidity.update();
+            PH.update();
+            PHWater.update();
+            Moisture.update();
+            Light.update();
+            Wind.update();
+            Rain.update();
+        })
 
         function filter() {
 
-            var date    = $('#day').val();
-            var data   = new Date($('#month').val());
-            var month  = data.getMonth() + 1 ;
-            var year   = data.getFullYear();
-            if (date != "" && data == "Invalid Date" ) {
+            var date = $('#day').val();
+            var data = new Date($('#month').val());
+            var month = data.getMonth() + 1;
+            var year = data.getFullYear();
+            if (date != "" && data == "Invalid Date") {
                 $.ajax({
-                    url:"{{ url('/filterHari')}}",
+                    url: "{{ url('/filterHari') }}",
                     data: {
-                        date : date
+                        date: date
                     },
-                    success: function(data){
+                    success: function(data) {
                         $('#konten').html(data);
                     }
                 });
-            }else if (date == "" && data != "Invalid Date") {
+            } else if (date == "" && data != "Invalid Date") {
                 $.ajax({
-                    url:"{{ url('/filterBulan')}}",
+                    url: "{{ url('/filterBulan') }}",
                     data: {
-                        month : month,
-                        year  : year
+                        month: month,
+                        year: year
                     },
-                    success: function(data){
+                    success: function(data) {
                         $('#konten').html(data);
                         // console.log(data);
                     }
                 });
-            }else if (date == "" && data == "Invalid Date") {
+            } else if (date == "" && data == "Invalid Date") {
                 $.notify("Pilih terlebih dahulu filter hari atau bulan")
-            }else if(date != "" && data != "Invalid Date"){
+            } else if (date != "" && data != "Invalid Date") {
                 $.notify("Pilih salah satu filter hari atau bulan")
             }
 
         }
     </script>
 @endpush
-
-
-
