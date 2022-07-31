@@ -13,8 +13,8 @@ conn = psycopg2.connect(user="postgres",
 
 def on_connect(client, userdata, flags, rc):
    print("connecting mqtt"+str(rc))
+#    client.subscribe("smartpaddy/polindra"
    client.subscribe("smartpaddy/polindra")
-
 
 def on_message(client, userdata, msg):
    try:
@@ -42,6 +42,7 @@ def on_message(client, userdata, msg):
         print(data)
    except :
         print("Format json error")
+        print(str)
 
 def main():
    cursor = conn.cursor()

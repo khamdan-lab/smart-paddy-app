@@ -633,6 +633,7 @@
 
         client.on('message', function(topic, message) {
             let data = message.toString().split(",")
+            console.log(data);
             temp.push(data[1]);
             humd.push(data[2]);
             soilMoisture.push(data[3]);
