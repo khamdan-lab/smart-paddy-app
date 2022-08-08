@@ -4,6 +4,12 @@ import paho.mqtt.client as mqtt
 from matplotlib.pyplot import connect
 import psycopg2
 import json
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+MQTT_USERNAME = os.getenv("MQTT_USERNAME")
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD")
 
 conn = psycopg2.connect(user="postgres",
                             password="root",
@@ -12,8 +18,7 @@ conn = psycopg2.connect(user="postgres",
                             database="sensor")
 
 def on_connect(client, userdata, flags, rc):
-   print("connecting mqtt"+str(rc))
-#    client.subscribe("smartpaddy/polindra"
+   print("connected to mqtt"+str(rc))
    client.subscribe("smartpaddy/polindra")
 
 def on_message(client, userdata, msg):
@@ -47,6 +52,7 @@ def on_message(client, userdata, msg):
 def main():
    cursor = conn.cursor()
    client = mqtt.Client()
+   client.username_pw_set(MQTT_USERNAME, password=MQTT_PASSWORD)
    client.on_connect = on_connect
    client.on_message = on_message
    client.connect("iot.mushonnip.me", 1883,60)
