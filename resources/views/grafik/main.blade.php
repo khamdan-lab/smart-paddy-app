@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Suhu</div>
+                <div class="card-title">Suhu (°C)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -14,7 +14,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Kelembaban</div>
+                <div class="card-title">Kelembaban (%)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -28,7 +28,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">PH Tanah</div>
+                <div class="card-title">PH Tanah (pH)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -40,7 +40,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">PH Air</div>
+                <div class="card-title">PH Air (pH)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -54,7 +54,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Kelembaban Tanah</div>
+                <div class="card-title">Kelembaban Tanah (%)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -66,7 +66,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Intensitas Cahaya</div>
+                <div class="card-title">Intensitas Cahaya (Lux)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -80,7 +80,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Kecepatan Angin</div>
+                <div class="card-title">Kecepatan Angin (m/s)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">
@@ -92,7 +92,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Curah Hujan</div>
+                <div class="card-title">Curah Hujan (mm)</div>
             </div>
             <div class="card-body">
                 <div class="chart-container">

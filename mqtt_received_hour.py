@@ -44,6 +44,7 @@ def on_message(client, userdata, msg):
         conn.close
         print('success')
         print("Date and time is:", timestamp)
+        print(data_byte)
         print(data)
    except :
         print("Format json error")

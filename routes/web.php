@@ -15,10 +15,9 @@ use App\Http\Controllers\API\DataSensorController;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
     return view('auth.login');
-
 });
+
 
 Route::get('/data_sensor', [DataSensorController::class, 'index']);
 Route::get('/store_detail', [DataSensorController::class, 'store']);

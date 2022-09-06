@@ -35,7 +35,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Suhu</div>
+                            <div class="card-title">Suhu (°C)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -47,7 +47,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Kelembaban</div>
+                            <div class="card-title">Kelembaban (%)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -61,7 +61,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">PH Tanah</div>
+                            <div class="card-title">PH Tanah (pH)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -73,7 +73,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">PH Air</div>
+                            <div class="card-title">PH Air (pH)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -87,7 +87,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Kelembaban Tanah</div>
+                            <div class="card-title">Kelembaban Tanah (%)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -99,7 +99,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Intensitas Cahaya</div>
+                            <div class="card-title">Intensitas Cahaya (Lux)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -113,7 +113,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Kecepatan Angin</div>
+                            <div class="card-title">Kecepatan Angin (m/s)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -125,7 +125,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <div class="card-title">Curah Hujan</div>
+                            <div class="card-title">Curah Hujan (mm)</div>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">
@@ -621,19 +621,22 @@
             clean: true,
             connectTimeout: 4000,
             clientId: 'test',
+            // username: 'khamdan',
+            // password: 'khamdan123',
         }
         var host = '{{ env('MQTT_HOST') }}';
         topic = '{{ env('MQTT_TOPIC') }}';
 
         const client = mqtt.connect('{{ env('MQTT_PROTOCOL') }}://' + host + ':{{ env('MQTT_PORT') }}', options)
         client.on('connect', function() {
-            console.log('Websoket Connected')
+            // console.log('Websoket Connected')
             client.subscribe(topic)
         })
 
         client.on('message', function(topic, message) {
             let data = message.toString().split(",")
             console.log(data);
+
             temp.push(data[1]);
             humd.push(data[2]);
             soilMoisture.push(data[3]);
@@ -652,6 +655,22 @@
             Light.update();
             Wind.update();
             Rain.update();
+
+            if (data[1] >= 30) {
+                var notification_temp = alertify.notify('Suhu  tinggi segera lakukan pengairan', 'success', 3600, function(){  console.log('dismissed'); });
+            }
+
+            if (data[3] <= 40 ) {
+                var notification_soilPh = alertify.notify('Kelembaban tanah rendah lakukan pengairan', 'success', 3600, function(){  console.log('dismissed'); });
+            }
+
+            if (data[4] <= 6.00) {
+                var notification_soilMoisture = alertify.notify('PH tanah rendah', 'success', 3600, function(){  console.log('dismissed'); });
+            }
+
+            
+
+
         })
 
         function filter() {
@@ -689,5 +708,14 @@
             }
 
         }
+        var message = []
+
+        console.log(message);
+
+        $("#bell").click(function() {
+            alertify.confirm('Pemberitahuan', 'Confirm Message', function(){ alertify.success('Ok') }
+                , function(){ alertify.error('Cancel')});
+        });
+
     </script>
 @endpush

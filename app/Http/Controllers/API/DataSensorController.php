@@ -15,6 +15,7 @@ class DataSensorController extends Controller
         $date = Carbon::now()->toDateString();
 
         $temp           = DataSensor::whereDate('created_at', $date)->pluck('temperature');
+        // return $temp;
         $humd           = DataSensor::whereDate('created_at', $date)->pluck('humidity');
         $soilPH         = DataSensor::whereDate('created_at', $date)->pluck('ph');
         $waterPH        = DataSensor::whereDate('created_at', $date)->pluck('ph_water');
